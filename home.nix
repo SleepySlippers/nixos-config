@@ -22,8 +22,7 @@
 
   # set cursor size and dpi for 4k monitor
   xresources.properties = {
-    "Xcursor.size" = 16;
-    "Xft.dpi" = 172;
+    "Xft.dpi" = 96;
   };
 
   # Packages that should be installed to the user profile.
@@ -121,7 +120,6 @@
     enable = true;
     extraConfig = ''
       map ctrl+[ send_text all \x1b
-      font_size 7.0
     '';
   };
 
