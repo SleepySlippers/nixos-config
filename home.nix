@@ -111,22 +111,18 @@
       aws.disabled = true;
       gcloud.disabled = true;
       line_break.disabled = true;
+      git_branch.disabled = true;
+      git_status.disabled = true;
+      git_state.disabled = true;
     };
   };
 
-  # alacritty - a cross-platform, GPU-accelerated terminal emulator
-  programs.alacritty = {
+  programs.kitty = {
     enable = true;
-    # custom settings
-    settings = {
-      env.TERM = "xterm-256color";
-      font = {
-        size = 12;
-        draw_bold_text_with_bright_colors = true;
-      };
-      scrolling.multiplier = 5;
-      selection.save_to_clipboard = true;
-    };
+    extraConfig = ''
+      map ctrl+[ send_text all \x1b
+      font_size 7.0
+    '';
   };
 
   programs.bash = {
