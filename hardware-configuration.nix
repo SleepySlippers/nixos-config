@@ -4,7 +4,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  pathExists = builtins.fileExists;
+  pathExists = builtins.pathExists;
   efiDevice = "/dev/disk/by-partlabel/EFI";
   fallbackDevice = "/dev/disk/by-partlabel/ESP";
   bootDevice = if pathExists efiDevice then efiDevice else fallbackDevice;
