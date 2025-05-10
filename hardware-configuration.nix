@@ -3,6 +3,12 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
 
+let
+  pathExists = pkgs.lib.fileExists;
+  efiDevice = "/dev/disk/by-partlabel/EFI";
+  fallbackDevice = "/dev/disk/by-partlabel/ESP";
+  bootDevice = if pathExists efiDevice then efiDevice else fallbackDevice;
+in
 {
   imports = [ ];
 
@@ -16,19 +22,11 @@
       fsType = "ext4";
     };
 
-  let
-    # Import the pathExists function from pkgs
-    pathExists = pkgs.lib.fileExists;
-    efiDevice = "/dev/disk/by-partlabel/EFI";
-    fallbackDevice = "/dev/disk/by-partlabel/ESP";
-  in
-  {
-    fileSystems."/boot" = {
-      device = if pathExists efiDevice then efiDevice else fallbackDevice;
+  fileSystems."/boot" =
+    { device = bootDevice;
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
-  }
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/bda11584-13a1-4562-bed9-09841f489837"; }
