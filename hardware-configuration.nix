@@ -16,11 +16,19 @@
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-partlabel/EFI";
+  let
+    # Import the pathExists function from pkgs
+    pathExists = pkgs.lib.fileExists;
+    efiDevice = "/dev/disk/by-partlabel/EFI";
+    fallbackDevice = "/dev/disk/by-partlabel/ESP";
+  in
+  {
+    fileSystems."/boot" = {
+      device = if pathExists efiDevice then efiDevice else fallbackDevice;
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
+  }
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/bda11584-13a1-4562-bed9-09841f489837"; }
