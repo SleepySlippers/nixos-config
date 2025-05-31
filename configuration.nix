@@ -64,6 +64,16 @@
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
+  hardware.opengl = {
+    enable = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      vulkan-loader
+      vulkan-validation-layers
+      vulkan-extension-layer
+    ];
+  };
+
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

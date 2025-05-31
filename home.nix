@@ -92,6 +92,10 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
+
+    steam
+    telegram-desktop
+    sct
   ];
 
   # basic configuration of git, please change to your own
@@ -129,6 +133,7 @@
     # TODO add your custom bashrc here
     bashrcExtra = ''
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+      sct 2500
     '';
 
     # set some aliases, feel free to add more or remove some
