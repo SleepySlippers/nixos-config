@@ -43,21 +43,37 @@
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # services.xserver.enable = true;
 
   # Enable the XFCE Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.displayManager.defaultSession = "sway";
+  # services.xserver.desktopManager.xfce.enable = true;
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+  security.polkit.enable = true; # for sway
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        # Use the tuigreet binary from nixpkgs
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        user = "greeter";  # the user greetd runs as for greeter
+      };
+    };
   };
 
-  services.xserver.xkb.options = "ctrl:nocaps";
+  # Configure keymap in X11
+  # services.xserver.xkb = {
+  #   layout = "us,ru";
+  #   variant = "";
+  #   options = "ctrl:nocaps";
+  # };
 
-  console = { useXkbConfig = true; };
+  # console = { useXkbConfig = true; };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -73,8 +89,9 @@
       vulkan-extension-layer
     ];
   };
+  hardware.bluetooth.enable = true;
 
-  security.rtkit.enable = true;
+  security.rtkit.enable = true; # for better response for audio be high priority
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -95,7 +112,7 @@
   users.users.sen = {
     isNormalUser = true;
     description = "sen";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "video" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -104,12 +121,21 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  programs.light.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    swaylock
+    waybar
+    grim # for wayland screenshot
+    slurp # for wayland crop
+    wl-clipboard
+    mako # for wayland notifications
+
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     htop

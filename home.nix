@@ -21,8 +21,65 @@
   # '';
 
   # set cursor size and dpi for 4k monitor
-  xresources.properties = {
-    "Xft.dpi" = 96;
+  # xresources.properties = {
+  #   "Xft.dpi" = 96;
+  # };
+
+  wayland.windowManager.sway = {
+    enable = true;
+    config = rec {
+      modifier = "Mod4";
+      # Use kitty as default terminal
+      terminal = "kitty";
+      startup = [
+        # Launch Firefox on start
+        {command = "firefox";}
+        {command = "waybar";}
+        {command = "kitty zellij";}
+      ];
+      defaultWorkspace = "workspace number 1";
+    };
+    extraConfig = ''
+      set $mod Mod4
+
+      input "type:keyboard" {
+        xkb_layout us,ru
+        xkb_options ctrl:nocaps,grp:win_space_toggle
+      }
+
+      input "type:touchpad" {
+        natural_scroll enabled
+	tap enabled
+	accel_profile adaptive
+	drag_lock enabled
+      }
+
+      # Bind Alt+Tab to switch to next workspace on current output
+      bindsym Alt+Tab workspace next_on_output
+      # Bind Alt+Shift+Tab to switch to previous workspace on current output
+      bindsym Alt+Shift+Tab workspace prev_on_output
+
+      bindsym $mod+Ctrl+l exec swaylock -f --color 051c38
+    '';
+    systemd.enable = true;
+  };
+  services.swayidle = {
+    enable = true;
+    systemdTarget = "sway-session.target"; # or your session target
+    timeouts = [
+      {
+        timeout = 30; # lock screen after 30 seconds idle
+        command = "${pkgs.swaylock}/bin/swaylock -f --color 051c38";
+      }
+      {
+        timeout = 60; # 30 seconds after locking, turn off screen
+        command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * dpms on'";
+      }
+    ];
+  };
+  programs.waybar = {
+    enable = true;
   };
 
   # Packages that should be installed to the user profile.
@@ -96,7 +153,12 @@
     steam
     telegram-desktop
     sct
+
+    font-awesome
+    jetbrains-mono
   ];
+  
+  fonts.fontconfig.enable = true;
 
   # basic configuration of git, please change to your own
   programs.git = {
@@ -133,6 +195,8 @@
     # TODO add your custom bashrc here
     bashrcExtra = ''
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+      export EDITOR=nvim
+      export VISUAL=nvim
       sct 2500
     '';
 
