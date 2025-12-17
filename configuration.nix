@@ -70,6 +70,12 @@
   services.desktopManager.cosmic.enable = true;
   services.desktopManager.cosmic.xwayland.enable = true;
 
+  # services.displayManager.enable = true;
+  # services.displayManager.dms-greeter.enable = true;
+  # programs.niri.enable = true;
+  # services.displayManager.dms-greeter.compositor.name = "niri";
+  # services.displayManager.dms-greeter.logs.save = true;
+
   # Configure keymap in X11
   # services.xserver.xkb = {
   #   layout = "us,ru";
