@@ -156,9 +156,21 @@
 
     font-awesome
     jetbrains-mono
+
+    gnumake
+    glibc
+    gcc_multi
+    python3
   ];
   
   fonts.fontconfig.enable = true;
+  
+  programs.vscode = {
+    enable = true;
+    extensions = with pkgs.vscode-extensions; [
+      llvm-vs-code-extensions.vscode-clangd
+    ];
+  };
 
   # basic configuration of git, please change to your own
   programs.git = {

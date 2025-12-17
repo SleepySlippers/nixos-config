@@ -50,21 +50,25 @@
   # services.xserver.displayManager.defaultSession = "sway";
   # services.xserver.desktopManager.xfce.enable = true;
 
-  security.polkit.enable = true; # for sway
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-  };
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        # Use the tuigreet binary from nixpkgs
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd 'sway --unsupported-gpu'";
-        user = "greeter";  # the user greetd runs as for greeter
-      };
-    };
-  };
+  # security.polkit.enable = true; # for sway
+  # programs.sway = {
+  #   enable = true;
+  #   wrapperFeatures.gtk = true;
+  # };
+  # services.greetd = {
+  #   enable = true;
+  #   settings = {
+  #     default_session = {
+  #       # Use the tuigreet binary from nixpkgs
+  #       command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd 'sway --unsupported-gpu'";
+  #       user = "greeter";  # the user greetd runs as for greeter
+  #     };
+  #   };
+  # };
+
+  services.displayManager.cosmic-greeter.enable = true;
+  services.desktopManager.cosmic.enable = true;
+  services.desktopManager.cosmic.xwayland.enable = true;
 
   # Configure keymap in X11
   # services.xserver.xkb = {
@@ -77,6 +81,8 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # services.ntopng.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -173,6 +179,7 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+  programs.java.enable = true;
 
   programs.light.enable = true;
 
@@ -199,10 +206,15 @@
     neovim
     lazygit
     kitty
+    xfce.xfce4-terminal
     just
     dysk
     gdu
     zellij
+
+    sshuttle
+    syncthing
+    keepass
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
