@@ -104,6 +104,7 @@
   # Enable OpenGL
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
   };
 
   # Load nvidia driver for Xorg and Wayland
@@ -189,6 +190,8 @@
 
   programs.light.enable = true;
 
+  programs.amnezia-vpn.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -220,7 +223,11 @@
 
     sshuttle
     syncthing
-    keepass
+    keepassxc
+    gparted
+    btrfs-progs
+    alacritty
+    nix-index
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
