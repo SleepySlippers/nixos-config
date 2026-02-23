@@ -46,9 +46,23 @@
   # services.xserver.enable = true;
 
   # Enable the XFCE Desktop Environment.
-  # services.xserver.displayManager.gdm.enable = true;
+  # services.displayManager.gdm.enable = true;
   # services.xserver.displayManager.defaultSession = "sway";
   # services.xserver.desktopManager.xfce.enable = true;
+  
+  services.xserver = {
+    enable = true;
+    displayManager.lightdm.enable = true;
+    displayManager.lightdm.greeters.gtk.enable = true;
+    videoDrivers = [ "nvidia" ];
+    desktopManager = {
+      xterm.enable = false;
+      xfce.enable = true;
+    };
+    layout = "us,ru";
+    xkbOptions = "ctrl:nocaps,grp:win_space_toggle";
+  };
+  services.displayManager.defaultSession = "xfce";
 
   # security.polkit.enable = true; # for sway
   # programs.sway = {
@@ -66,9 +80,9 @@
   #   };
   # };
 
-  services.displayManager.cosmic-greeter.enable = true;
-  services.desktopManager.cosmic.enable = true;
-  services.desktopManager.cosmic.xwayland.enable = true;
+  # services.displayManager.cosmic-greeter.enable = true;
+  # services.desktopManager.cosmic.enable = true;
+  # services.desktopManager.cosmic.xwayland.enable = true;
 
   # services.displayManager.enable = true;
   # services.displayManager.dms-greeter.enable = true;
@@ -91,69 +105,70 @@
   # services.ntopng.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  hardware.opengl = {
+  services.pulseaudio.enable = false;
+  hardware.enableAllFirmware = false;
+  # hardware.opengl = {
+  #   enable = true;
+  #   driSupport32Bit = true;
+  # };
+  # # Enable OpenGL
+  hardware.graphics = {
     enable = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       vulkan-loader
       vulkan-validation-layers
       vulkan-extension-layer
     ];
   };
-  # Enable OpenGL
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
 
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = [
-    "modesetting"  # example for Intel iGPU; use "amdgpu" here instead if your iGPU is AMD
-    "nvidia"
-  ];
+  # services.xserver.videoDrivers = [
+  #   "modesetting"  # example for Intel iGPU; use "amdgpu" here instead if your iGPU is AMD
+  #   # "nvidia"
+  # ];
 
-  hardware.nvidia = {
+	hardware.nvidia = {
 
-    # Modesetting is required.
-    modesetting.enable = true;
+	  # Modesetting is required.
+	  modesetting.enable = true;
 
-    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-    # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
-    # of just the bare essentials.
-    powerManagement.enable = false;
+	  # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
+	  # Enable this if you have graphical corruption issues or application crashes after waking
+	  # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+	  # of just the bare essentials.
+	  powerManagement.enable = false;
 
-    # Fine-grained power management. Turns off GPU when not in use.
-    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-    powerManagement.finegrained = false;
+	  # Fine-grained power management. Turns off GPU when not in use.
+	  # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+	  powerManagement.finegrained = false;
 
-    # Use the NVidia open source kernel module (not to be confused with the
-    # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
-    # Only available from driver 515.43.04+
-    open = true;
+	  # Use the NVidia open source kernel module (not to be confused with the
+	  # independent third-party "nouveau" open source driver).
+	  # Support is limited to the Turing and later architectures. Full list of 
+	  # supported GPUs is at: 
+	  # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+	  # Only available from driver 515.43.04+
+	  open = true;
 
-    # Enable the Nvidia settings menu,
-	# accessible via `nvidia-settings`.
-    nvidiaSettings = true;
+	  # Enable the Nvidia settings menu,
+	  # accessible via `nvidia-settings`.
+	  nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
-  hardware.nvidia.prime = {
-    offload = {
-      enable = true;
-      enableOffloadCmd = true;
-    };
-    # Make sure to use the correct Bus ID values for your system!
-    intelBusId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:1:0:0";
-    # amdgpuBusId = "PCI:54:0:0"; For AMD GPU
-  };
+	  # Optionally, you may need to select the appropriate driver version for your specific GPU.
+	  package = config.boot.kernelPackages.nvidiaPackages.stable;
 
+	  prime = {
+	    offload = {
+	      enable = true;
+	      enableOffloadCmd = true;
+	    };
+	    # Make sure to use the correct Bus ID values for your system!
+	    intelBusId = "PCI:0:2:0";
+	    nvidiaBusId = "PCI:1:0:0";
+	    # amdgpuBusId = "PCI:54:0:0"; For AMD GPU
+	  };
+	};
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
@@ -228,6 +243,12 @@
     btrfs-progs
     alacritty
     nix-index
+
+    zapret
+    lm_sensors
+    mangohud
+
+    wireshark
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

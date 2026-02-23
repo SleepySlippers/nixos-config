@@ -4,6 +4,7 @@
   inputs = {
     # NixOS official package source, using the nixos-unstable branch here
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    stable-nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11"; # Java21: stable
     # home-manager, used for managing user configuration
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -15,11 +16,12 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
+  outputs = inputs@{ nixpkgs, stable-nixpkgs, home-manager, ... }: {
     nixosConfigurations = {
       # TODO please change the hostname to your own
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit stable-nixpkgs; };
         modules = [
           ./configuration.nix
 
@@ -35,6 +37,7 @@
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
           }
+          # ./tlauncher-wrapper/flake_.nix
         ];
       };
     };
