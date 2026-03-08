@@ -167,8 +167,6 @@
   programs.firefox.enable = true;
   programs.java.enable = true;
 
-  programs.light.enable = true;
-
   programs.amnezia-vpn.enable = true;
   services.syncthing.enable = true;
 
