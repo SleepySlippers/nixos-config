@@ -199,6 +199,13 @@
     enable = true;
     extraConfig = ''
       map ctrl+[ send_text all \x1b
+      linux_display_backend x11
+
+      font_family      Hack Nerd Font
+      bold_font        Hack Nerd Font Bold
+      italic_font      Hack Nerd Font Italic
+      bold_italic_font Hack Nerd Font Bold Italic
+      font_size        12.0
     '';
   };
 
@@ -210,7 +217,7 @@
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
       export EDITOR=nvim
       export VISUAL=nvim
-      sct 2500
+      sct 3500
     '';
 
     # set some aliases, feel free to add more or remove some

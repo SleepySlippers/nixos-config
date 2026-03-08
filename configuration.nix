@@ -193,9 +193,19 @@
   users.users.sen = {
     isNormalUser = true;
     description = "sen";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "syncthing" ];
     packages = with pkgs; [
     #  thunderbird
+    ];
+  };
+
+  fonts = {
+    fontDir.enable = true;
+    fontconfig.enable = true;
+    packages = with pkgs; [
+      nerd-fonts.hack
+      nerd-fonts.inconsolata
+      nerd-fonts.ubuntu-mono
     ];
   };
 
@@ -206,6 +216,7 @@
   programs.light.enable = true;
 
   programs.amnezia-vpn.enable = true;
+  services.syncthing.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -237,7 +248,6 @@
     zellij
 
     sshuttle
-    syncthing
     keepassxc
     gparted
     btrfs-progs
@@ -249,6 +259,11 @@
     mangohud
 
     wireshark
+    gdb
+    cgdb
+
+    xsel
+    xclip
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
