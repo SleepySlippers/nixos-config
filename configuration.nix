@@ -59,37 +59,18 @@
   #   };
   # };
 
-  # services.displayManager.cosmic-greeter.enable = true;
-  # services.desktopManager.cosmic.enable = true;
-  # services.desktopManager.cosmic.xwayland.enable = true;
-
   # services.displayManager.enable = true;
   # services.displayManager.dms-greeter.enable = true;
   # programs.niri.enable = true;
   # services.displayManager.dms-greeter.compositor.name = "niri";
   # services.displayManager.dms-greeter.logs.save = true;
 
-  # Configure keymap in X11
-  # services.xserver.xkb = {
-  #   layout = "us,ru";
-  #   variant = "";
-  #   options = "ctrl:nocaps";
-  # };
-
-  # console = { useXkbConfig = true; };
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # services.ntopng.enable = true;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   hardware.enableAllFirmware = false;
-  # hardware.opengl = {
-  #   enable = true;
-  #   driSupport32Bit = true;
-  # };
   # # Enable OpenGL
   hardware.graphics = {
     enable = true;
@@ -100,12 +81,6 @@
       vulkan-extension-layer
     ];
   };
-
-  # Load nvidia driver for Xorg and Wayland
-  # services.xserver.videoDrivers = [
-  #   "modesetting"  # example for Intel iGPU; use "amdgpu" here instead if your iGPU is AMD
-  #   # "nvidia"
-  # ];
 
 	hardware.nvidia = {
 
