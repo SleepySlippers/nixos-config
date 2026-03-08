@@ -21,7 +21,10 @@
       # TODO please change the hostname to your own
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit stable-nixpkgs; };
+        specialArgs = { 
+          inherit stable-nixpkgs;
+          desktopEnv = "xfce";
+        };
         modules = [
           ./configuration.nix
 

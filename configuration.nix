@@ -2,12 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, desktopEnv ? "xfce", ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules/desktop_environment/${desktopEnv}.nix
     ];
 
   # Bootloader.
@@ -41,28 +42,6 @@
     LC_TELEPHONE = "ru_RU.UTF-8";
     LC_TIME = "ru_RU.UTF-8";
   };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Enable the XFCE Desktop Environment.
-  # services.displayManager.gdm.enable = true;
-  # services.xserver.displayManager.defaultSession = "sway";
-  # services.xserver.desktopManager.xfce.enable = true;
-  
-  services.xserver = {
-    enable = true;
-    displayManager.lightdm.enable = true;
-    displayManager.lightdm.greeters.gtk.enable = true;
-    videoDrivers = [ "nvidia" ];
-    desktopManager = {
-      xterm.enable = false;
-      xfce.enable = true;
-    };
-    layout = "us,ru";
-    xkbOptions = "ctrl:nocaps,grp:win_space_toggle";
-  };
-  services.displayManager.defaultSession = "xfce";
 
   # security.polkit.enable = true; # for sway
   # programs.sway = {
@@ -241,7 +220,6 @@
     neovim
     lazygit
     kitty
-    xfce.xfce4-terminal
     just
     dysk
     gdu
