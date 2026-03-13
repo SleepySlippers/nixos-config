@@ -218,6 +218,15 @@
       export EDITOR=nvim
       export VISUAL=nvim
       sct 3500
+
+      function yy() {
+        local tmp="$(mktemp -t 'yazi-cwd.XXXXXX')"
+        yazi "$@" --cwd-file="$tmp"
+        if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+          cd -- "$cwd"
+        fi
+        rm -f -- "$tmp"
+      }
     '';
 
     # set some aliases, feel free to add more or remove some
@@ -225,7 +234,7 @@
       urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
       urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
       j = "just";
-      y = "yazi";
+      y = "yy";
       laz = "lazygit";
     };
   };
