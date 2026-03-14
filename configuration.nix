@@ -14,6 +14,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -103,7 +104,7 @@
 	  # supported GPUs is at: 
 	  # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
 	  # Only available from driver 515.43.04+
-	  open = true;
+	  open = false;
 
 	  # Enable the Nvidia settings menu,
 	  # accessible via `nvidia-settings`.
@@ -125,6 +126,8 @@
 	};
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
+
+  services.flatpak.enable = true;
 
   security.rtkit.enable = true; # for better response for audio be high priority
   services.pipewire = {
