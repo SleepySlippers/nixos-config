@@ -243,6 +243,14 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    extraPackages = with pkgs; [
+      rust-analyzer
+      rustc
+      cargo
+    ];
+    plugins = with pkgs.vimPlugins; [
+      nvim-lspconfig
+    ];
   };
 
   # This value determines the home Manager release that your
