@@ -23,7 +23,7 @@
         system = "x86_64-linux";
         specialArgs = { 
           inherit stable-nixpkgs;
-          desktopEnv = "cosmic";
+          desktopEnv = "niri";
         };
         modules = [
           ./configuration.nix
