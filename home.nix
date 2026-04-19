@@ -233,12 +233,12 @@ inputs: { config, pkgs, ... }:
   
   fonts.fontconfig.enable = true;
   
-  programs.vscode = {
-    enable = true;
-    extensions = with pkgs.vscode-extensions; [
-      llvm-vs-code-extensions.vscode-clangd
-    ];
-  };
+  # programs.vscode = {
+  #   enable = true;
+  #   extensions = with pkgs.vscode-extensions; [
+  #     llvm-vs-code-extensions.vscode-clangd
+  #   ];
+  # };
 
   # basic configuration of git, please change to your own
   programs.git = {
@@ -311,9 +311,9 @@ inputs: { config, pkgs, ... }:
     enable = true;
     defaultEditor = true;
     extraPackages = with pkgs; [
-      rust-analyzer
-      rustc
-      cargo
+      # rust-analyzer
+      # rustc
+      # cargo
     ];
     plugins = with pkgs.vimPlugins; [
       nvim-lspconfig

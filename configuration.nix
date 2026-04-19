@@ -84,6 +84,7 @@
     ];
   };
 
+  services.speechd.enable = false;
   boot.kernelParams = [ "nvidia-drm.modeset=1" ];
   services.xserver.videoDrivers = [ "nvidia" ]; # for wayland it is need too
 	hardware.nvidia = {
@@ -132,7 +133,7 @@
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  services.flatpak.enable = true;
+  # services.flatpak.enable = true;
 
   security.rtkit.enable = true; # for better response for audio be high priority
   services.pipewire = {
@@ -173,7 +174,7 @@
 
   # Install firefox.
   programs.firefox.enable = true;
-  programs.java.enable = true;
+  # programs.java.enable = true;
 
   programs.amnezia-vpn.enable = true;
   services.syncthing.enable = true;
@@ -217,7 +218,7 @@
     lm_sensors
     mangohud
 
-    wireshark
+    # wireshark
     gdb
     cgdb
 
