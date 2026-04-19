@@ -1,9 +1,71 @@
-{ config, pkgs, ... }:
+inputs: { config, pkgs, ... }:
 
 {
   # TODO please change the username & home directory to your own
   home.username = "sen";
   home.homeDirectory = "/home/sen";
+
+  imports = [
+    inputs.noctalia.homeModules.default
+  ];
+
+  # configure options
+  programs.noctalia-shell = {
+    enable = true;
+    settings = {
+      # configure noctalia here
+      bar = {
+        density = "compact";
+        position = "right";
+        showCapsule = false;
+        widgets = {
+          left = [
+            {
+              id = "ControlCenter";
+              useDistroLogo = true;
+            }
+            {
+              id = "Network";
+            }
+            {
+              id = "Bluetooth";
+            }
+          ];
+          center = [
+            {
+              hideUnoccupied = false;
+              id = "Workspace";
+              labelMode = "none";
+            }
+          ];
+          right = [
+            {
+              alwaysShowPercentage = false;
+              id = "Battery";
+              warningThreshold = 30;
+            }
+            {
+              formatHorizontal = "HH:mm";
+              formatVertical = "HH mm";
+              id = "Clock";
+              useMonospacedFont = true;
+              usePrimaryColor = true;
+            }
+          ];
+        };
+      };
+      colorSchemes.predefinedScheme = "Monochrome";
+      general = {
+        avatarImage = "/home/sen/Downloads/11093979.jpg";
+        radiusRatio = 0.2;
+      };
+      location = {
+        monthBeforeDay = true;
+        name = "Marseille, France";
+      };
+    };
+    # this may also be a string or a path to a JSON file.
+  };
 
   # link the configuration file in current directory to the specified location in home directory
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
@@ -25,62 +87,62 @@
   #   "Xft.dpi" = 96;
   # };
 
-  wayland.windowManager.sway = {
-    enable = true;
-    config = rec {
-      modifier = "Mod4";
-      # Use kitty as default terminal
-      terminal = "kitty";
-      startup = [
-        # Launch Firefox on start
-        {command = "firefox";}
-        {command = "waybar";}
-        {command = "kitty zellij";}
-      ];
-      defaultWorkspace = "workspace number 1";
-    };
-    extraConfig = ''
-      set $mod Mod4
-
-      input "type:keyboard" {
-        xkb_layout us,ru
-        xkb_options ctrl:nocaps,grp:win_space_toggle
-      }
-
-      input "type:touchpad" {
-        natural_scroll enabled
-	tap enabled
-	accel_profile adaptive
-	drag_lock enabled
-      }
-
-      # Bind Alt+Tab to switch to next workspace on current output
-      bindsym Alt+Tab workspace next_on_output
-      # Bind Alt+Shift+Tab to switch to previous workspace on current output
-      bindsym Alt+Shift+Tab workspace prev_on_output
-
-      bindsym $mod+Ctrl+l exec swaylock -f --color 051c38
-    '';
-    systemd.enable = true;
-  };
-  services.swayidle = {
-    enable = true;
-    systemdTarget = "sway-session.target"; # or your session target
-    timeouts = [
-      {
-        timeout = 30; # lock screen after 30 seconds idle
-        command = "${pkgs.swaylock}/bin/swaylock -f --color 051c38";
-      }
-      {
-        timeout = 60; # 30 seconds after locking, turn off screen
-        command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'";
-        resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * dpms on'";
-      }
-    ];
-  };
-  programs.waybar = {
-    enable = true;
-  };
+	#  wayland.windowManager.sway = {
+	#    enable = true;
+	#    config = rec {
+	#      modifier = "Mod4";
+	#      # Use kitty as default terminal
+	#      terminal = "kitty";
+	#      startup = [
+	#        # Launch Firefox on start
+	#        {command = "firefox";}
+	#        {command = "waybar";}
+	#        {command = "kitty zellij";}
+	#      ];
+	#      defaultWorkspace = "workspace number 1";
+	#    };
+	#    extraConfig = ''
+	#      set $mod Mod4
+	#
+	#      input "type:keyboard" {
+	#        xkb_layout us,ru
+	#        xkb_options ctrl:nocaps,grp:win_space_toggle
+	#      }
+	#
+	#      input "type:touchpad" {
+	#        natural_scroll enabled
+	# tap enabled
+	# accel_profile adaptive
+	# drag_lock enabled
+	#      }
+	#
+	#      # Bind Alt+Tab to switch to next workspace on current output
+	#      bindsym Alt+Tab workspace next_on_output
+	#      # Bind Alt+Shift+Tab to switch to previous workspace on current output
+	#      bindsym Alt+Shift+Tab workspace prev_on_output
+	#
+	#      bindsym $mod+Ctrl+l exec swaylock -f --color 051c38
+	#    '';
+	#    systemd.enable = true;
+	#  };
+  # services.swayidle = {
+  #   enable = true;
+  #   systemdTarget = "sway-session.target"; # or your session target
+  #   timeouts = [
+  #     {
+  #       timeout = 30; # lock screen after 30 seconds idle
+  #       command = "${pkgs.swaylock}/bin/swaylock -f --color 051c38";
+  #     }
+  #     {
+  #       timeout = 60; # 30 seconds after locking, turn off screen
+  #       command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'";
+  #       resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * dpms on'";
+  #     }
+  #   ];
+  # };
+  # programs.waybar = {
+  #   enable = true;
+  # };
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
@@ -89,6 +151,9 @@
 
     fastfetch
     nnn # terminal file manager
+    nautilus
+    mpv
+    qbittorrent
 
     # archives
     zip
@@ -162,6 +227,8 @@
     glibc
     gcc_multi
     python3
+
+    fuzzel
   ];
   
   fonts.fontconfig.enable = true;

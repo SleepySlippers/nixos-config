@@ -16,6 +16,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
+
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -83,10 +84,13 @@
     ];
   };
 
+  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
+  services.xserver.videoDrivers = [ "nvidia" ]; # for wayland it is need too
 	hardware.nvidia = {
 
 	  # Modesetting is required.
 	  modesetting.enable = true;
+	  nvidiaPersistenced = true;
 
 	  # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
 	  # Enable this if you have graphical corruption issues or application crashes after waking
@@ -117,10 +121,11 @@
 	    offload = {
 	      enable = true;
 	      enableOffloadCmd = true;
+	      offloadCmdMainProgram = "nvidia-offload";
 	    };
 	    # Make sure to use the correct Bus ID values for your system!
-	    intelBusId = "PCI:0:2:0";
-	    nvidiaBusId = "PCI:1:0:0";
+	    intelBusId =  "PCI:0@0:2:0"; # pci@0000:00:02.0
+	    nvidiaBusId = "PCI:1@0:0:0"; # pci@0000:01:00.0
 	    # amdgpuBusId = "PCI:54:0:0"; For AMD GPU
 	  };
 	};
@@ -180,7 +185,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     swaylock
-    waybar
+    # waybar
     grim # for wayland screenshot
     slurp # for wayland crop
     wl-clipboard
@@ -218,6 +223,8 @@
 
     xsel
     xclip
+
+    nvtopPackages.full
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

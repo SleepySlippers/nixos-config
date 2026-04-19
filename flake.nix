@@ -14,6 +14,10 @@
       # to avoid problems caused by different versions of nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, stable-nixpkgs, home-manager, ... }: {
@@ -36,7 +40,7 @@
             home-manager.useUserPackages = true;
 
             # TODO replace ryan with your own username
-            home-manager.users.sen = import ./home.nix;
+            home-manager.users.sen = (import ./home.nix  inputs) ;
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
           }
