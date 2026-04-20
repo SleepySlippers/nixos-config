@@ -176,7 +176,6 @@
   programs.firefox.enable = true;
   # programs.java.enable = true;
 
-  programs.amnezia-vpn.enable = true;
   services.syncthing.enable = true;
 
   # Allow unfree packages
