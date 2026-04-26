@@ -70,6 +70,8 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   hardware.enableAllFirmware = false;
@@ -177,6 +179,10 @@
   # programs.java.enable = true;
 
   services.syncthing.enable = true;
+
+  services.gvfs.enable = true;
+
+  powerManagement.cpuFreqGovernor = "powersave";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

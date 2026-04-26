@@ -16,31 +16,19 @@ inputs: { config, pkgs, ... }:
       # configure noctalia here
       bar = {
         density = "compact";
-        position = "right";
+        position = "top";
         showCapsule = false;
         widgets = {
           left = [
-            {
-              id = "ControlCenter";
-              useDistroLogo = true;
-            }
-            {
-              id = "Network";
-            }
-            {
-              id = "Bluetooth";
-            }
-          ];
-          center = [
             {
               hideUnoccupied = false;
               id = "Workspace";
               labelMode = "none";
             }
           ];
-          right = [
+          center = [
             {
-              alwaysShowPercentage = false;
+              alwaysShowPercentage = true;
               id = "Battery";
               warningThreshold = 30;
             }
@@ -52,6 +40,38 @@ inputs: { config, pkgs, ... }:
               usePrimaryColor = true;
             }
           ];
+          right = [
+            {
+              id = "SystemMonitor";
+            }
+            {
+              id = "Spacer";
+            }
+            {
+              id = "Network";
+            }
+            {
+              id = "Bluetooth";
+            }
+            {
+              id = "KeyboardLayout";
+            }
+            {
+              id = "Brightness";
+            }
+            {
+              id = "Microphone";
+            }
+            {
+              alwaysShowPercentage = true;
+              id = "Battery";
+              warningThreshold = 30;
+            }
+            {
+              id = "ControlCenter";
+              useDistroLogo = true;
+            }
+          ];
         };
       };
       colorSchemes.predefinedScheme = "Monochrome";
@@ -60,9 +80,54 @@ inputs: { config, pkgs, ... }:
         radiusRatio = 0.2;
       };
       location = {
-        monthBeforeDay = true;
-        name = "Marseille, France";
+        monthBeforeDay = false;
+        name = "Moscow, Russia";
       };
+    };
+
+    colors = {   
+      mError = "#ff5555";
+      mHover = "#8be9fd";
+      mOnError = "#282a36";
+      mOnHover = "#003543";
+      mOnPrimary = "#282a36";
+      mOnSecondary = "#4e1d32";
+      mOnSurface = "#f8f8f2";
+      mOnSurfaceVariant = "#d6d8e0";
+      mOnTertiary = "#003543";
+      mOutline = "#5a5e77";
+      mPrimary = "#bd93f9";
+      mSecondary = "#ff79c6";
+      mShadow = "#282a36";
+      mSurface = "#282a36";
+      mSurfaceVariant = "#44475a";
+      mTertiary = "#8be9fd";
+    };
+    
+    plugins = {
+      sources = [
+        {
+          enabled = true;
+          name = "Official Noctalia Plugins";
+          url = "https://github.com/noctalia-dev/noctalia-plugins";
+        }
+      ];
+      states = {
+        catwalk = {
+          enabled = true;
+          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+        };
+      };
+      version = 2;
+    };
+    # this may also be a string or a path to a JSON file.
+
+    pluginSettings = {
+      catwalk = {
+        minimumThreshold = 25;
+        hideBackground = true;
+      };
+      # this may also be a string or a path to a JSON file.
     };
     # this may also be a string or a path to a JSON file.
   };
@@ -167,7 +232,7 @@ inputs: { config, pkgs, ... }:
     yq-go # yaml processor https://github.com/mikefarah/yq
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
-    tldr
+    tealdeer
 
     # networking tools
     mtr # A network diagnostic tool
@@ -310,14 +375,9 @@ inputs: { config, pkgs, ... }:
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    extraPackages = with pkgs; [
-      # rust-analyzer
-      # rustc
-      # cargo
-    ];
-    plugins = with pkgs.vimPlugins; [
-      nvim-lspconfig
-    ];
+    sideloadInitLua = true;
+    withPython3 = false;
+    withRuby = false;
   };
 
   # This value determines the home Manager release that your
