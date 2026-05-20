@@ -182,7 +182,8 @@
 
   services.gvfs.enable = true;
 
-  powerManagement.cpuFreqGovernor = "powersave";
+  # powerManagement.cpuFreqGovernor = "powersave";
+  powerManagement.cpuFreqGovernor = "performance";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
