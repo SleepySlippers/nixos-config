@@ -86,6 +86,8 @@ let
       
       update_dir
 
+      export GDK_BACKEND=x11
+
       exec ${java21}/bin/java -jar "$LOCAL_JAR"
     '';
   };
@@ -94,6 +96,7 @@ in
   environment.systemPackages = [ 
     tlauncherWrapper
     java21
+    stpkgs.lshw
     stpkgs.gtk3
     stpkgs.glib
     stpkgs.mesa
