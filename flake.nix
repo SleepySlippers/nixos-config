@@ -53,7 +53,7 @@
 
             # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
           }
-          # ./tlauncher-wrapper/flake_.nix
+          ./tlauncher-wrapper/flake_.nix
         ];
       };
     };
