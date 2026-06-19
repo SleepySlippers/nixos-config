@@ -68,7 +68,9 @@ let
 
       TLAUNCHER_DIR="$HOME/.tlauncher"
 
-      cp "$ZIP/$JAR_PATH" "$TLAUNCHER_DIR/$JAR_PATH"
+      if [ ! -e "$TLAUNCHER_DIR/$JAR_PATH" ] || ! cmp -s "$ZIP/$JAR_PATH" "$TLAUNCHER_DIR/$JAR_PATH"; then
+        cp "$ZIP/$JAR_PATH" "$TLAUNCHER_DIR/$JAR_PATH"
+      fi
 
       LOCAL_JAR="$TLAUNCHER_DIR/$JAR_PATH"
       
@@ -80,14 +82,25 @@ let
       for dir in "$TL_JAVA_PATH"/*/; do
         [ -d "$dir" ] || continue
         pushd "$dir" >/dev/null
+
+        expected_sha=$(shasum -a 1 ${jdkWithJFX}/bin/java | awk '{print $1}')
+
+        CONF_JSON_PATH=jreConfig.json
+
+        actual_sha=$(jq -r '(.resources[] | select(.path | test("jre_default/.+/bin/java"))).sha1 // empty' "$CONF_JSON_PATH")
+
+        # If already correct, skip replacement + JSON update
+        if [ -n "$actual_sha" ] && [ "$actual_sha" = "$expected_sha" ]; then
+          popd >/dev/null
+          continue
+        fi
+
         mv bin/java bin/java.bak
         ln -s ${jdkWithJFX}/bin/java bin/java
         
         SHA=$(shasum -a 1 bin/java | awk '{print $1}')
         SIZE=$(wc -c < bin/java)
         echo new sha1 sum "$SHA" for "$dir"
-
-        CONF_JSON_PATH=jreConfig.json
         
         jq --arg newsha "$SHA" --arg newsize "$SIZE" '(.resources[] | select(.path | test("jre_default/.+/bin/java"))) |= (.sha1 = $newsha | .size = $newsize)' $CONF_JSON_PATH > $CONF_JSON_PATH.tmp && mv $CONF_JSON_PATH.tmp $CONF_JSON_PATH
         
@@ -97,6 +110,45 @@ let
       
       update_dir
 
+      newEntry='{
+        "id": 99,
+        "name": "java-nixos",
+        "path": "${jdkWithJFX}",
+        "args": [
+          "-XX:+UnlockExperimentalVMOptions",
+          "-XX:+UseG1GC",
+          "-XX:G1NewSizePercent\u003d20",
+          "-XX:G1ReservePercent\u003d20",
+          "-XX:MaxGCPauseMillis\u003d50",
+          "-XX:G1HeapRegionSize\u003d32M",
+          "-Dfml.ignoreInvalidMinecraftCertificates\u003dtrue",
+          "-Dfml.ignorePatchDiscrepancies\u003dtrue",
+          "-Djava.net.preferIPv4Stack\u003dtrue"
+        ]
+      }'
+
+      JAVA_CONFIG_JS="$TLAUNCHER_DIR"/minecraft_tlauncher_java_config.json
+
+      if [ ! -e "$JAVA_CONFIG_JS" ]; then
+        echo '{}' > "$JAVA_CONFIG_JS"
+      fi
+
+      jq --argjson newEntry "$newEntry" '
+        .jvm["99"] = $newEntry
+      ' "$JAVA_CONFIG_JS" > "$JAVA_CONFIG_JS".tmp && mv "$JAVA_CONFIG_JS".tmp "$JAVA_CONFIG_JS"
+
+      TLAUNCHER_PROPS="$TLAUNCHER_DIR"/tlauncher-2.0.properties
+      if [ ! -e "$TLAUNCHER_PROPS" ]; then
+        echo ' ' > "$TLAUNCHER_PROPS"
+      fi
+      sed -i 's/^minecraft\.java\.selected=.*/minecraft.java.selected=99/' "$TLAUNCHER_PROPS"
+
+      file_path=$(find "$TLAUNCHER_DIR"/starter/cache/https_repo.tlauncher.org/update/lch -maxdepth 1 -type f -name "starter-core-*.jar" -print -quit)
+      [ -n "$file_path" ] && echo "Found already existent tlauncher client $file_path. will use it" && LOCAL_JAR="$file_path"
+
+      if command -v nvidia-offload >/dev/null 2>&1; then
+        exec nvidia-offload -- ${jdkWithJFX}/bin/java -jar "$LOCAL_JAR"
+      fi
       exec ${jdkWithJFX}/bin/java -jar "$LOCAL_JAR"
     '';
   };
