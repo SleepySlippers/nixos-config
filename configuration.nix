@@ -139,6 +139,7 @@
 
   security.rtkit.enable = true; # for better response for audio be high priority
   services.pipewire = {
+    audio.enable = true;
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;

@@ -19,13 +19,17 @@
 let
   # stpkgs = stable-nixpkgs.legacyPackages.${pkgs.system};
   stpkgs = pkgs;
-  # Java21 from stable input (cached!)
-  java21 = stpkgs.openjdk21.override {
-    enableJavaFX = true;
-    openjfx_jdk = stpkgs.openjfx.override {
-      withWebKit = true;
-    };
-  };
+
+  jdk21 = stpkgs.openjdk21;
+
+  jdkWithJFX =
+    if jdk21.pname == "openjdk" then
+      jdk21.override {
+        enableJavaFX = true;
+        openjfx21 = stpkgs.openjfx21.override { withWebKit = true; };
+      }
+    else
+      throw "bad jdk variant";
 
   tlauncherZip = pkgs.fetchzip {
     url = "https://dl1.tlauncher.org/f.php?f=files%2FTLauncher.v17.zip";
@@ -35,7 +39,7 @@ let
 
   tlauncherWrapper = pkgs.writeShellApplication {
     name = "tlauncher";
-    runtimeInputs = [ java21 ];
+    runtimeInputs = [ jdkWithJFX ];
     # pkgs.gtk3 pkgs.glib pkgs.glfw pkgs.mesa pkgs.libGL
     
     # export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [
@@ -47,7 +51,14 @@ let
       set -euo pipefail
       set -x
 
-      export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ stpkgs.gtk3 stpkgs.glib stpkgs.mesa stpkgs.libGL stpkgs.glfw ]}
+      export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ stpkgs.gtk3 stpkgs.glib stpkgs.mesa stpkgs.libGL stpkgs.glfw stpkgs.openal ]}
+
+      export ALSOFT_LOGLEVEL=3
+      export ALSOFT_LOGFILE=/tmp/alsoft.log
+
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export AWT_TOOLKIT=MToolKit
+      export WM_NAME=LG3D
 
       ZIP=${tlauncherZip}
 
@@ -70,7 +81,7 @@ let
         [ -d "$dir" ] || continue
         pushd "$dir" >/dev/null
         mv bin/java bin/java.bak
-        ln -s ${java21}/bin/java bin/java
+        ln -s ${jdkWithJFX}/bin/java bin/java
         
         SHA=$(shasum -a 1 bin/java | awk '{print $1}')
         SIZE=$(wc -c < bin/java)
@@ -86,21 +97,20 @@ let
       
       update_dir
 
-      export GDK_BACKEND=x11
-
-      exec ${java21}/bin/java -jar "$LOCAL_JAR"
+      exec ${jdkWithJFX}/bin/java -jar "$LOCAL_JAR"
     '';
   };
 in
 {
   environment.systemPackages = [ 
     tlauncherWrapper
-    java21
+    jdkWithJFX
     stpkgs.lshw
     stpkgs.gtk3
     stpkgs.glib
     stpkgs.mesa
     stpkgs.libGL
     stpkgs.glfw
+    stpkgs.openal
   ];
 }
