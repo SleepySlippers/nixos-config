@@ -10,7 +10,7 @@ inputs: { config, pkgs, ... }:
   ];
 
   # configure options
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
     settings = {
       # configure noctalia here
@@ -84,52 +84,6 @@ inputs: { config, pkgs, ... }:
         name = "Moscow, Russia";
       };
     };
-
-    colors = {   
-      mError = "#ff5555";
-      mHover = "#8be9fd";
-      mOnError = "#282a36";
-      mOnHover = "#003543";
-      mOnPrimary = "#282a36";
-      mOnSecondary = "#4e1d32";
-      mOnSurface = "#f8f8f2";
-      mOnSurfaceVariant = "#d6d8e0";
-      mOnTertiary = "#003543";
-      mOutline = "#5a5e77";
-      mPrimary = "#bd93f9";
-      mSecondary = "#ff79c6";
-      mShadow = "#282a36";
-      mSurface = "#282a36";
-      mSurfaceVariant = "#44475a";
-      mTertiary = "#8be9fd";
-    };
-    
-    plugins = {
-      sources = [
-        {
-          enabled = true;
-          name = "Official Noctalia Plugins";
-          url = "https://github.com/noctalia-dev/noctalia-plugins";
-        }
-      ];
-      states = {
-        catwalk = {
-          enabled = true;
-          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-        };
-      };
-      version = 2;
-    };
-    # this may also be a string or a path to a JSON file.
-
-    pluginSettings = {
-      catwalk = {
-        minimumThreshold = 25;
-        hideBackground = true;
-      };
-      # this may also be a string or a path to a JSON file.
-    };
-    # this may also be a string or a path to a JSON file.
   };
 
   # link the configuration file in current directory to the specified location in home directory
