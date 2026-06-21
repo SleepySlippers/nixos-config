@@ -37,6 +37,18 @@ let
     stripRoot = false;
   };
 
+  linkingLibs = with stpkgs; [
+    gtk3
+    glib
+    mesa
+    libGL
+    glfw
+
+    openal
+    alsa-lib
+    libpulseaudio
+  ];
+
   tlauncherWrapper = pkgs.writeShellApplication {
     name = "tlauncher";
     runtimeInputs = [ jdkWithJFX ];
@@ -51,7 +63,7 @@ let
       set -euo pipefail
       set -x
 
-      export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ stpkgs.gtk3 stpkgs.glib stpkgs.mesa stpkgs.libGL stpkgs.glfw stpkgs.openal ]}
+      export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath linkingLibs}
 
       export ALSOFT_LOGLEVEL=3
       export ALSOFT_LOGFILE=/tmp/alsoft.log
@@ -157,12 +169,5 @@ in
   environment.systemPackages = [ 
     tlauncherWrapper
     jdkWithJFX
-    stpkgs.lshw
-    stpkgs.gtk3
-    stpkgs.glib
-    stpkgs.mesa
-    stpkgs.libGL
-    stpkgs.glfw
-    stpkgs.openal
-  ];
+  ] ++ linkingLibs;
 }
