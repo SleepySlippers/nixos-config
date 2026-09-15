@@ -45,7 +45,9 @@
     LC_TIME = "ru_RU.UTF-8";
   };
 
-  # security.polkit.enable = true; # for sway
+  security.polkit.enable = true; # for sway
+  security.wrappers.pkexec.enable = false;
+  services.udisks2.enable = true;
   # programs.sway = {
   #   enable = true;
   #   wrapperFeatures.gtk = true;
@@ -178,6 +180,7 @@
   # Install firefox.
   programs.firefox.enable = true;
   # programs.java.enable = true;
+  programs.wireshark.enable = true;
 
   services.syncthing.enable = true;
 
@@ -216,7 +219,6 @@
 
     sshuttle
     keepassxc
-    gparted
     btrfs-progs
     alacritty
     nix-index
@@ -232,8 +234,15 @@
     xsel
     xclip
 
+    gamescope
+    gnome-disk-utility
+
+    nix-tree
+
     nvtopPackages.full
   ];
+
+  programs.firejail.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
