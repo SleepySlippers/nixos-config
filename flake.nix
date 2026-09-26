@@ -39,6 +39,7 @@
           ({ pkgs, ... }: {
             programs.amnezia-vpn.enable = true;
             programs.amnezia-vpn.package = stable-nixpkgs.legacyPackages.${system}.amnezia-vpn;
+            environment.systemPackages = with pkgs; [ monero-gui ];
           })
 
           # make home-manager as a module of nixos

@@ -72,6 +72,11 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cuda;
+  };
+
   services.power-profiles-daemon.enable = true;
   services.upower.enable = true;
   # Enable sound with pipewire.
