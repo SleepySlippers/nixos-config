@@ -36,12 +36,6 @@
         modules = [
           ./configuration.nix
 
-          ({ pkgs, ... }: {
-            programs.amnezia-vpn.enable = true;
-            programs.amnezia-vpn.package = stable-nixpkgs.legacyPackages.${system}.amnezia-vpn;
-            environment.systemPackages = with pkgs; [ monero-gui ];
-          })
-
           # make home-manager as a module of nixos
           # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
           home-manager.nixosModules.home-manager

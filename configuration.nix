@@ -72,11 +72,6 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  services.ollama = {
-    enable = true;
-    package = pkgs.ollama-cuda;
-  };
-
   services.power-profiles-daemon.enable = true;
   services.upower.enable = true;
   # Enable sound with pipewire.
@@ -186,6 +181,7 @@
   programs.firefox.enable = true;
   # programs.java.enable = true;
   programs.wireshark.enable = true;
+  programs.amnezia-vpn.enable = true;
 
   services.syncthing.enable = true;
 
@@ -228,6 +224,7 @@
     alacritty
     nix-index
 
+    monero-gui
     zapret
     lm_sensors
     mangohud
