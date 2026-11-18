@@ -262,8 +262,8 @@ inputs: { config, pkgs, ... }:
   # basic configuration of git, please change to your own
   programs.git = {
     enable = true;
-    userName = "Arseny Staroverov";
-    userEmail = "arsen2001god@bk.ru";
+    settings.user.name = "Arseny Staroverov";
+    settings.user.email = "arsen2001god@bk.ru";
   };
 
   # starship - an customizable prompt for any shell
