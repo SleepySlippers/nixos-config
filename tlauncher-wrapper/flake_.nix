@@ -17,8 +17,8 @@
 
 { pkgs, lib, stable-nixpkgs, ... }:  # Receive stable pkgs as argument
 let
-  # stpkgs = stable-nixpkgs.legacyPackages.${pkgs.system};
-  stpkgs = pkgs;
+  stpkgs = stable-nixpkgs.legacyPackages.${pkgs.system};
+  # stpkgs = pkgs;
 
   jdk21 = stpkgs.openjdk21;
 

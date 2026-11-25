@@ -161,7 +161,7 @@
   users.users.sen = {
     isNormalUser = true;
     description = "sen";
-    extraGroups = [ "networkmanager" "wheel" "video" "syncthing" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "syncthing" "wireshark" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -180,8 +180,20 @@
   # Install firefox.
   programs.firefox.enable = true;
   # programs.java.enable = true;
-  programs.wireshark.enable = true;
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark;
+    dumpcap.enable = true;
+  };
   programs.amnezia-vpn.enable = true;
+  programs.amnezia-vpn.package = pkgs.amnezia-vpn.overrideAttrs (oldAttrs: {
+    preConfigure =
+      (oldAttrs.preConfigure or "")
+      + ''
+        export PROD_AGW_PUBLIC_KEY="$(printf '%s' "$PROD_AGW_PUBLIC_KEY" | sed 's/[\]n$//')"
+        export DEV_AGW_PUBLIC_KEY="$(printf '%s' "$DEV_AGW_PUBLIC_KEY" | sed 's/[\]n$//')"
+      '';
+  });
 
   services.syncthing.enable = true;
 
